@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 export default function Register() {
 
   const API_URL = import.meta.env.VITE_API_URL;
+  console.log("API_URL:", API_URL);
 
   const navigate = useNavigate();
 
