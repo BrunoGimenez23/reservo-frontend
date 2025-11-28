@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 export default function PublicBooking() {
   const { slug } = useParams();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [business, setBusiness] = useState(null);
   const [businessId, setBusinessId] = useState(null);
   const [services, setServices] = useState([]);
@@ -22,14 +24,14 @@ export default function PublicBooking() {
   const today = new Date().toISOString().split("T")[0];
 
   const loadBusiness = async () => {
-    const res = await fetch(`http://localhost:8080/public/business/slug/${slug}`);
+    const res = await fetch(`${API_URL}/public/business/slug/${slug}`);
     const data = await res.json();
     setBusiness(data);
     setBusinessId(data.id);
   };
 
   const loadServices = async () => {
-    const res = await fetch(`http://localhost:8080/public/business/${businessId}/services`);
+    const res = await fetch(`${API_URL}/public/business/${businessId}/services`);
     setServices(await res.json());
   };
 
@@ -37,9 +39,8 @@ export default function PublicBooking() {
     if (!selectedService || !date) return;
 
     setLoadingSlots(true);
-
     const res = await fetch(
-      `http://localhost:8080/public/business/${businessId}/availability?serviceId=${selectedService.id}&date=${date}`
+      `${API_URL}/public/business/${businessId}/availability?serviceId=${selectedService.id}&date=${date}`
     );
     setSlots(await res.json());
     setLoadingSlots(false);
@@ -52,7 +53,7 @@ export default function PublicBooking() {
     const startTime = `${date}T${selectedTime}`;
 
     const res = await fetch(
-      `http://localhost:8080/public/business/${businessId}/reservations`,
+      `${API_URL}/public/business/${businessId}/reservations`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,7 +97,7 @@ export default function PublicBooking() {
   return (
     <div className="min-h-screen bg-zinc-900 text-white px-4 pt-28 pb-20">
       <div className="max-w-md mx-auto space-y-8 animate-fadeIn">
-        
+
         {/* NEGOCIO */}
         {business && (
           <div className="bg-zinc-800 border border-zinc-700 rounded-3xl shadow-xl p-8 text-center space-y-3">
@@ -145,18 +146,17 @@ export default function PublicBooking() {
         {/* FECHA */}
         {selectedService && (
           <div className="bg-zinc-800 border border-zinc-700 rounded-2xl p-6 space-y-4 animate-fadeIn">
-            <label className="font-semibold">Seleccioná la fecha 📅</label>
-            
-            <div className="flex items-center gap-3 bg-zinc-900 p-3 rounded-xl border border-zinc-700">
-              <Calendar size={20} className="text-zinc-400" />
-              <input
-                type="date"
-                min={today}
-                className="bg-transparent w-full"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </div>
+            <label className="font-semibold flex gap-2 items-center">
+              <Calendar size={20} /> Seleccioná la fecha
+            </label>
+
+            <input
+              type="date"
+              min={today}
+              className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-700 focus:ring-2 focus:ring-amber-500 outline-none"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
 
             <button
               onClick={fetchSlots}

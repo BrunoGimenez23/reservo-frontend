@@ -12,24 +12,28 @@ export default function AdminServices() {
 
   const token = localStorage.getItem("token");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const load = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/admin/services/${businessId}`,
+        `${API_URL}/admin/services/${businessId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setServices(res.data || []);
-    } catch {
+    } catch (err) {
+      console.error("Error al cargar servicios:", err);
       setServices([]);
     }
   };
 
   const add = async () => {
-    if (!name || !price || !duration) return alert("Completá todos los campos");
+    if (!name || !price || !duration)
+      return alert("Completá todos los campos");
 
     try {
       await axios.post(
-        `http://localhost:8080/admin/services/${businessId}`,
+        `${API_URL}/admin/services/${businessId}`,
         { name, price, durationMinutes: duration },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -38,18 +42,20 @@ export default function AdminServices() {
       setPrice("");
       setDuration("");
       load();
-    } catch {
+    } catch (err) {
       alert("Error agregando servicio ❌");
     }
   };
 
   const remove = async (id) => {
+    if (!confirm("¿Eliminar servicio?")) return;
+
     try {
-      await axios.delete(`http://localhost:8080/admin/services/${id}`, {
+      await axios.delete(`${API_URL}/admin/services/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       load();
-    } catch {
+    } catch (err) {
       alert("Error eliminando servicio ❌");
     }
   };
@@ -62,7 +68,10 @@ export default function AdminServices() {
     <div className="min-h-screen bg-zinc-900 text-white px-4 pt-28 pb-14">
       <div className="max-w-xl mx-auto space-y-8 animate-fadeIn">
         {/* HEADER */}
-        <h2 className="text-3xl font-extrabold">Servicios ✂️</h2>
+        <h2 className="text-3xl font-extrabold flex items-center gap-2">
+          <Scissors className="text-amber-500" />
+          Servicios
+        </h2>
 
         {/* FORM */}
         <div className="bg-zinc-800 border border-zinc-700 p-5 rounded-2xl shadow-xl space-y-3">

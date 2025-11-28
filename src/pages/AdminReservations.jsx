@@ -6,14 +6,18 @@ import { CheckCircle, XCircle, CalendarClock, Scissors } from "lucide-react";
 export default function AdminReservations() {
   const { businessId } = useParams();
   const [reservations, setReservations] = useState([]);
-  const [filter, setFilter] = useState("ALL"); // 👈 Filtro
+  const [filter, setFilter] = useState("ALL");
   const token = localStorage.getItem("token");
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const loadReservations = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/admin/business/${businessId}/reservations`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${API_URL}/admin/business/${businessId}/reservations`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setReservations(res.data || []);
     } catch (err) {
@@ -25,9 +29,11 @@ export default function AdminReservations() {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(
-        `http://localhost:8080/admin/business/${businessId}/reservations/${id}?status=${status}`,
+        `${API_URL}/admin/business/${businessId}/reservations/${id}?status=${status}`,
         {},
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       loadReservations();
     } catch (err) {
@@ -85,7 +91,7 @@ export default function AdminReservations() {
         ) : (
           <div className="space-y-4 pb-10">
             {reservations
-              .filter((r) => filter === "ALL" || r.status === filter) // 👈 Filtro aplicado
+              .filter((r) => filter === "ALL" || r.status === filter)
               .map((r) => (
                 <div
                   key={r.id}

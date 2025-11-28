@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Plus, Eye, Trash2 } from "lucide-react";
 
 export default function AdminBusiness() {
+  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -16,7 +17,7 @@ export default function AdminBusiness() {
 
   const load = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/admin/business", {
+      const res = await axios.get(`${API_URL}/admin/business`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const list = Array.isArray(res.data) ? res.data : [];
@@ -33,7 +34,7 @@ export default function AdminBusiness() {
   const save = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:8080/admin/business",
+        `${API_URL}/admin/business`,
         { name, address, phone },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -45,7 +46,7 @@ export default function AdminBusiness() {
 
   const remove = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/admin/business/${id}`, {
+      await axios.delete(`${API_URL}/admin/business/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       load();

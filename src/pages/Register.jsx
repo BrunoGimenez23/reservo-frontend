@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
 
-const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
 
@@ -22,10 +22,10 @@ const API_URL = import.meta.env.VITE_API_URL;
     setLoading(true);
 
     try {
-      const res = await axios.post("${API_URL}/auth/register", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${API_URL}/auth/register`,
+        { email, password }
+      );
 
       localStorage.setItem("token", res.data.token);
       navigate("/admin/business");
@@ -80,7 +80,6 @@ const API_URL = import.meta.env.VITE_API_URL;
           {loading ? "Creando..." : "Crear cuenta 🚀"}
         </button>
 
-        {/* Divider */}
         <div className="flex items-center gap-3 my-6">
           <span className="h-px flex-1 bg-zinc-700"></span>
           <span className="text-xs text-zinc-500">ó</span>
@@ -96,7 +95,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 
         <p className="text-center text-zinc-400 mt-6 text-sm">
           ¿Ya tenés cuenta?{" "}
-          <Link to="/login" className="text-amber-400 font-bold hover:text-amber-300">
+          <Link
+            to="/login"
+            className="text-amber-400 font-bold hover:text-amber-300"
+          >
             Iniciar sesión
           </Link>
         </p>

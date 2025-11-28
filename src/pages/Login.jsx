@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -19,10 +22,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:8080/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${API_URL}/auth/login`,
+        { email, password }
+      );
 
       localStorage.setItem("token", res.data.token);
       navigate("/admin/business");
@@ -83,7 +86,6 @@ export default function Login() {
           <span className="h-px flex-1 bg-zinc-700"></span>
         </div>
 
-        {/* Google login placeholder */}
         <button
           disabled
           className="w-full py-3 bg-zinc-700 text-gray-400 rounded-xl font-semibold shadow transition cursor-not-allowed"
@@ -93,7 +95,10 @@ export default function Login() {
 
         <p className="text-center text-zinc-400 mt-6 text-sm">
           ¿No tenés cuenta?{" "}
-          <Link to="/register" className="text-amber-400 font-bold hover:text-amber-300">
+          <Link
+            to="/register"
+            className="text-amber-400 font-bold hover:text-amber-300"
+          >
             Crear cuenta
           </Link>
         </p>

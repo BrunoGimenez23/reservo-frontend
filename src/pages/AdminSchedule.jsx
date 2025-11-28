@@ -21,10 +21,12 @@ export default function AdminSchedule() {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const loadSchedule = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/admin/business/${businessId}/schedule`,
+        `${API_URL}/admin/business/${businessId}/schedule`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setSchedule(res.data || []);
@@ -38,7 +40,7 @@ export default function AdminSchedule() {
   const saveSchedule = async () => {
     try {
       await axios.put(
-        `http://localhost:8080/admin/business/${businessId}/schedule`,
+        `${API_URL}/admin/business/${businessId}/schedule`,
         schedule,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -70,13 +72,12 @@ export default function AdminSchedule() {
   return (
     <div className="min-h-screen bg-zinc-900 text-white px-4 pt-28 pb-14">
       <div className="max-w-lg mx-auto space-y-8 animate-fadeIn">
-        {/* HEADER */}
+
         <h1 className="text-3xl font-extrabold flex items-center gap-2">
           <Clock className="text-amber-500" />
           Horarios del negocio
         </h1>
 
-        {/* LISTA DE DÍAS */}
         {schedule.map((day, i) => {
           const dia = DIAS[i];
           return (
@@ -89,10 +90,8 @@ export default function AdminSchedule() {
               }`}
             >
               <div className="flex items-center justify-between">
-                {/* Día */}
                 <span className="font-semibold text-lg">{dia.label}</span>
 
-                {/* Toggle */}
                 <button
                   className="p-1"
                   onClick={() => updateField(i, "active", !day.active)}
@@ -105,13 +104,10 @@ export default function AdminSchedule() {
                 </button>
               </div>
 
-              {/* Inputs de horarios */}
               {day.active && (
                 <div className="mt-4 grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-zinc-400">
-                      Apertura
-                    </label>
+                    <label className="text-xs text-zinc-400">Apertura</label>
                     <input
                       type="time"
                       value={day.startTime}
@@ -123,9 +119,7 @@ export default function AdminSchedule() {
                   </div>
 
                   <div>
-                    <label className="text-xs text-zinc-400">
-                      Cierre
-                    </label>
+                    <label className="text-xs text-zinc-400">Cierre</label>
                     <input
                       type="time"
                       value={day.endTime}
@@ -141,7 +135,6 @@ export default function AdminSchedule() {
           );
         })}
 
-        {/* CTA Guardar */}
         <button
           onClick={saveSchedule}
           className="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold py-4 rounded-2xl shadow-xl transition active:scale-95 text-lg"

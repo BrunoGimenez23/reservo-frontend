@@ -9,13 +9,15 @@ export default function BusinessDashboard() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [business, setBusiness] = useState(null);
   const [showQR, setShowQR] = useState(false);
 
   const loadBusiness = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:8080/admin/business/${businessId}`,
+        `${API_URL}/admin/business/${businessId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
