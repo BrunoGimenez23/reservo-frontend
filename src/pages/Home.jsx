@@ -62,9 +62,9 @@ export default function Home() {
         </p>
 
         <div className="grid gap-10 sm:grid-cols-3 place-items-center">
-          <PhoneMockup img="/screens/dashboard.png" />
-          <PhoneMockup img="/screens/services.png" />
-          <PhoneMockup img="/screens/reserve.png" />
+          <PhoneMockup img="/serviciosiphone.png" />
+          <PhoneMockup img="/reservasiphone.png" />
+          <PhoneMockup img="clienteiphone.png" />
         </div>
       </section>
 
