@@ -10,6 +10,7 @@ import AdminServices from "./pages/AdminServices";
 import PublicBooking from "./pages/PublicBooking";
 import Register from "./pages/Register";
 import AdminSchedule from "./pages/AdminSchedule";
+import BookingSuccess from "./pages/BookingSuccess";
 
 export default function Router() {
   return (
@@ -20,6 +21,7 @@ export default function Router() {
         <Route path="/barberias" element={<BarbersHome />} /> {/* ⬅️ NUEVA LANDING */}
         <Route path="/login" element={<LoginWrapper />} />
         <Route path="/book/:businessId" element={<PublicBooking />} />
+        <Route path="/reserva-confirmada" element={<BookingSuccess />} />
         <Route path="/:slug" element={<PublicBooking />} />
         <Route path="/register" element={<Register />} />
 

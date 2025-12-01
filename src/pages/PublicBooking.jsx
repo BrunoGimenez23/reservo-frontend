@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
-import { Calendar, Clock, MapPin, Phone, CheckCircle } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { Calendar, Clock, MapPin, Phone } from "lucide-react";
+import { useParams, useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function PublicBooking() {
   const { slug } = useParams();
+  const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,8 +19,8 @@ export default function PublicBooking() {
   const [selectedTime, setSelectedTime] = useState("");
 
   const [clientName, setClientName] = useState("");
-  const [clientEmail, setClientEmail] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [clientPhone, setClientPhone] = useState("");
+
   const [loadingSlots, setLoadingSlots] = useState(false);
 
   const today = new Date().toISOString().split("T")[0];
@@ -47,8 +49,11 @@ export default function PublicBooking() {
   };
 
   const reserve = async () => {
-    if (!clientName || !clientEmail || !selectedTime)
-      return alert("Completá tus datos ✍️");
+    if (!clientName.trim() || !clientPhone.trim() || !selectedTime)
+      return toast.error("Completá tus datos ✍️");
+
+    if (!/^[0-9+\s]{8,12}$/.test(clientPhone))
+      return toast.error("Número inválido 📵");
 
     const startTime = `${date}T${selectedTime}`;
 
@@ -59,15 +64,26 @@ export default function PublicBooking() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clientName,
-          clientEmail,
+          clientPhone,
           startTime,
           serviceId: selectedService.id,
         }),
       }
     );
 
-    if (res.ok) setSuccess(true);
-    else alert("Error al reservar 😥");
+    const result = await res.json();
+
+    if (!res.ok) {
+      if (result.includes?.("ocupado"))
+        return toast.error("Ese horario ya está ocupado ⛔");
+      return toast.error("Error al reservar 😥");
+    }
+
+    toast.success("¡Reserva confirmada! 🎉");
+
+    setTimeout(() => {
+      navigate("/reserva-confirmada", { state: { reservation: result } });
+    }, 1500);
   };
 
   useEffect(() => {
@@ -78,24 +94,10 @@ export default function PublicBooking() {
     businessId && loadServices();
   }, [businessId]);
 
-  // 🎉 Pantalla de éxito
-  if (success)
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center bg-zinc-900 text-white px-6 text-center">
-        <CheckCircle size={70} className="text-green-400 mb-4" />
-        <h1 className="text-4xl font-extrabold mb-2">¡Reserva confirmada!</h1>
-        <p className="text-zinc-400">Te enviamos los detalles a tu email 📩</p>
-        <a
-          href="/"
-          className="mt-6 text-amber-400 underline font-semibold hover:text-amber-300"
-        >
-          Volver al inicio
-        </a>
-      </div>
-    );
-
   return (
     <div className="min-h-screen bg-zinc-900 text-white px-4 pt-28 pb-20">
+      <Toaster position="top-center" />
+
       <div className="max-w-md mx-auto space-y-8 animate-fadeIn">
 
         {/* NEGOCIO */}
@@ -206,12 +208,13 @@ export default function PublicBooking() {
             </div>
 
             <div>
-              <label className="text-sm">Email</label>
+              <label className="text-sm">Número de teléfono (WhatsApp)</label>
               <input
-                type="email"
+                type="tel"
                 className="w-full p-3 mt-1 bg-zinc-900 border border-zinc-700 rounded-xl focus:ring-2 focus:ring-amber-500 outline-none"
-                value={clientEmail}
-                onChange={(e) => setClientEmail(e.target.value)}
+                value={clientPhone}
+                onChange={(e) => setClientPhone(e.target.value)}
+                placeholder="09X XXX XXX"
               />
             </div>
           </div>
