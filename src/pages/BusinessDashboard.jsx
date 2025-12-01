@@ -116,29 +116,33 @@ export default function BusinessDashboard() {
           </h2>
 
           <div className="grid grid-cols-2 gap-5">
-            <button
-              onClick={() => navigate(`/admin/business/${businessId}/services`)}
-              className="p-5 bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95 flex flex-col items-center gap-2"
-            >
-              <Scissors size={28} />
-              Servicios
-            </button>
+  <button
+    onClick={() => navigate(`/admin/business/${businessId}/services`)}
+    className="bg-blue-600 hover:bg-blue-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95
+               flex flex-col justify-center items-center gap-2 w-full h-28"
+  >
+    <Scissors size={28} />
+    Servicios
+  </button>
 
-            <button
-              onClick={() => navigate(`/admin/business/${businessId}/reservations`)}
-              className="p-5 bg-green-600 hover:bg-green-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95 flex flex-col items-center gap-2"
-            >
-              <Calendar size={28} />
-              Reservas
-            </button>
+  <button
+    onClick={() => navigate(`/admin/business/${businessId}/reservations`)}
+    className="bg-green-600 hover:bg-green-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95
+               flex flex-col justify-center items-center gap-2 w-full h-28"
+  >
+    <Calendar size={28} />
+    Reservas
+  </button>
 
-            <button
-              onClick={() => navigate(`/admin/business/${businessId}/schedule`)}
-              className="p-5 bg-purple-600 hover:bg-purple-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95 flex flex-col items-center gap-2"
-            >
-              🕒 Horarios
-            </button>
-          </div>
+  <button
+    onClick={() => navigate(`/admin/business/${businessId}/schedule`)}
+    className="bg-purple-600 hover:bg-purple-700 rounded-2xl shadow-lg text-white font-semibold text-center transition active:scale-95
+               flex flex-col justify-center items-center gap-2 w-full h-28"
+  >
+    🕒 Horarios
+  </button>
+</div>
+
         </div>
 
       </div>
