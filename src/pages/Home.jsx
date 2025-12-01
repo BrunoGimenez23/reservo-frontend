@@ -10,7 +10,7 @@ export default function Home() {
         className="min-h-[80vh] w-full bg-cover bg-center relative px-6 flex flex-col items-center justify-center text-center"
         style={{ backgroundImage: "url('/barber-hero.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/90"></div>
+        <div className="absolute inset-0 bg-black/75"></div>
 
         <div className="relative z-10 max-w-3xl">
           <h1 className="text-4xl sm:text-5xl font-extrabold mb-5 leading-tight">
